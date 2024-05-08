@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>QR Code Generator</title>
+  </head>
+  <body class="flex items-center justify-center w-full h-screen bg-slate-200">
+    <div class="p-8 shadow-xl min-w-80 bg-black/10 rounded-3xl">
+      <div class="mx-auto text-6xl font-semibold w-fit" id="timer">
+        00:00:00
+      </div>
+      <div class="flex items-center gap-5 mx-auto mt-8 w-fit">
+        <button
+          class="flex items-center justify-center w-8 h-8 border-2 border-solid rounded-full border-slate-400 bg-slate-200 hover:scale-105"
+          id="pauseBtn"
+        >
+          <img src="pause.svg" alt="Pause" />
+        </button>
+        <button
+          class="flex items-center justify-center w-12 h-12 bg-red-100 border-2 border-red-500 border-solid rounded-full hover:scale-105"
+          id="playBtn"
+        >
+          <img src="play.svg" alt="Play" width="60" />
+        </button>
+        <button
+          class="flex items-center justify-center w-8 h-8 border-2 border-solid rounded-full border-slate-400 bg-slate-200 hover:scale-105"
+          id="resetBtn"
+        >
+          <img src="undo.svg" alt="Reset" />
+        </button>
+      </div>
+    </div>
+  </body>
+  <script>
+    const pauseBtn = document.getElementById("pauseBtn");
+    const playBtn = document.getElementById("playBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const displayTimer = document.getElementById("timer");
+
+    // Initialization
+    let [hour, minute, second] = [0, 0, 0];
+
+    let time = null;
+    function stopWatch() {
+      second++;
+      if (second == 60) {
+        second = 0;
+        minute++;
+        if (minute == 60) {
+          minute = 0;
+          hour++;
+        }
+      }
+      displayTimer.innerHTML = `${hour < 10 ? "0" + hour : hour}:${
+        minute < 10 ? "0" + minute : minute
+      }:${second < 10 ? "0" + second : second}`;
+    }
+    // Functions
+    function onPlay() {
+      time = setInterval(stopWatch, 1000);
+      playBtn.disabled = true;
+      console.log("Play");
+    }
+    function onPause() {
+      clearInterval(time);
+      playBtn.disabled = false;
+      console.log("Paused");
+    }
+    function onReset() {
+      clearInterval(time);
+      [hour, minute, second] = [0, 0, 0];
+      displayTimer.innerHTML = `${"0" + hour}:${"0" + minute}:${"0" + second}`;
+      playBtn.disabled = false;
+      console.log("Resetted");
+    }
+    // Events on Buttons
+    pauseBtn.addEventListener("click", onPause);
+    playBtn.addEventListener("click", onPlay);
+    resetBtn.addEventListener("click", onReset);
+  </script>
+</html>
